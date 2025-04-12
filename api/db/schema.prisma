@@ -24,12 +24,19 @@ model UserExample {
 }
 
 model User {
-  id                  Int       @id @default(autoincrement())
-  email               String    @unique
-  hashedPassword      String
-  salt                String
-  resetToken          String?
+  id          Int      @id @default(autoincrement())
+  name        String?
+  email       String   @unique
+  hashedPassword String
+  salt        String
+  resetToken        String?   @unique
   resetTokenExpiresAt DateTime?
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  roles       String   @default("user")
+  invitedBy   Int?                                    // the user ID of the admin who invited them
+  isInvited   Boolean   @default(false)
+  inviteToken   String?  @unique
+  inviteTokenExpiresAt   DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
+
