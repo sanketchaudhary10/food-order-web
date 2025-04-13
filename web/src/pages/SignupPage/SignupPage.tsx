@@ -15,13 +15,20 @@ import { toast, Toaster } from '@redwoodjs/web/toast'
 import { useAuth } from 'src/auth'
 
 const SignupPage = () => {
-  const { isAuthenticated, signUp } = useAuth()
+  // const { isAuthenticated, signUp } = useAuth()
+  const { isAuthenticated, loading, signUp } = useAuth()
+
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     navigate(routes.main())
+  //   }
+  // }, [isAuthenticated])
 
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate(routes.home())
+    if (!loading && isAuthenticated) {
+      navigate(routes.main())
     }
-  }, [isAuthenticated])
+  }, [loading, isAuthenticated])
 
   // focus on username box on page load
   const usernameRef = useRef<HTMLInputElement>(null)

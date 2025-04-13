@@ -12,12 +12,17 @@ import {
   BellIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
+import { useAuth } from 'src/auth'
+import { navigate, routes } from '@redwoodjs/router'
+
+import LoginPage from '../../pages/LoginPage/LoginPage'
 
 const navigation = [
   { name: 'Dashboard', href: '#', current: true },
   { name: 'Menu', href: '#', current: false },
   { name: 'Orders', href: '#', current: false },
   { name: 'Locations', href: '#', current: false },
+  { name: 'Login/Register', href: '/login', current: false },
 ]
 
 function classNames(...classes) {
@@ -25,6 +30,9 @@ function classNames(...classes) {
 }
 
 export default function NavBar() {
+
+  const { isAuthenticated, logOut } = useAuth()
+
   return (
     <Disclosure as="nav" className="bg-red-900 rounded-t-xl shadow-md">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -114,18 +122,24 @@ export default function NavBar() {
                     </a>
                   )}
                 </MenuItem>
-                <MenuItem>
-                  {({ active }) => (
-                    <a
-                      href="#"
-                      className={`block px-4 py-2 text-sm text-gray-700 ${
-                        active ? 'bg-gray-100' : ''
-                      }`}
-                    >
-                      Sign out
-                    </a>
-                  )}
-                </MenuItem>
+                {isAuthenticated && (
+                  <MenuItem>
+                    {({ active }) => (
+                      <button
+                        onClick={async () => {
+                          await logOut()
+                          navigate(routes.main())
+                        }}
+                        className={`block w-full text-left px-4 py-2 text-sm text-gray-700 ${
+                          active ? 'bg-gray-100' : ''
+                        }`}
+                      >
+                        Sign out
+                      </button>
+                    )}
+                  </MenuItem>
+                )}
+
               </MenuItems>
             </Menu>
           </div>

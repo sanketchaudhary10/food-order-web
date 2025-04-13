@@ -15,13 +15,22 @@ import { toast, Toaster } from '@redwoodjs/web/toast'
 import { useAuth } from 'src/auth'
 
 const LoginPage = () => {
-  const { isAuthenticated, logIn } = useAuth()
+  // const { isAuthenticated, logIn } = useAuth()
+  const { isAuthenticated, loading, logIn } = useAuth()
+
+
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     navigate(routes.main())
+  //   }
+  // }, [isAuthenticated])
 
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate(routes.home())
+    if (!loading && isAuthenticated) {
+      navigate(routes.main())
     }
-  }, [isAuthenticated])
+  }, [loading, isAuthenticated])
+  
 
   const usernameRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
@@ -32,6 +41,7 @@ const LoginPage = () => {
     const response = await logIn({
       username: data.username,
       password: data.password,
+      // Redirect after login
     })
 
     if (response.message) {
@@ -40,6 +50,7 @@ const LoginPage = () => {
       toast.error(response.error)
     } else {
       toast.success('Welcome back!')
+      navigate(routes.main())
     }
   }
 
