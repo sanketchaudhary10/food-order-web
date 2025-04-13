@@ -3,6 +3,7 @@ import type { QueryResolvers, MutationResolvers } from 'types/graphql'
 import { db } from 'src/lib/db'
 import { createTransport } from 'nodemailer'
 import { randomBytes } from 'crypto'
+import { hashPassword } from '@redwoodjs/auth-dbauth-api'
 
 
 export const users: QueryResolvers['users'] = () => {
@@ -90,7 +91,9 @@ export const inviteUser = async ({ input }) => {
     },
   })
 
-  const inviteLink = `http://localhost:8910/signup?token=${token}`
+  // const inviteLink = `http://localhost:8910/signup?token=${token}`
+  const inviteLink = `http://localhost:8910/accept-invite?token=${token}`
+
 
   await transporter.sendMail({
     from: process.env.EMAIL_FROM,
@@ -105,4 +108,35 @@ export const inviteUser = async ({ input }) => {
   return newUser
 }
 
+
+export const acceptInvite = async ({ input }) => {
+  const { token, name, password } = input
+
+  const user = await db.user.findUnique({
+    where: { inviteToken: token },
+  })
+
+  if (!user || !user.isInvited) {
+    throw new Error('Invalid or expired invite token.')
+  }
+
+  const now = new Date()
+  if (user.inviteTokenExpiresAt && user.inviteTokenExpiresAt < now) {
+    throw new Error('Invite link has expired.')
+  }
+
+  const [hashedPassword, salt] = hashPassword(password)
+
+  return db.user.update({
+    where: { id: user.id },
+    data: {
+      name,
+      hashedPassword,
+      salt,
+      isInvited: false,
+      inviteToken: null,
+      inviteTokenExpiresAt: null,
+    },
+  })
+}
 

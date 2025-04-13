@@ -2,6 +2,7 @@ export const schema = gql`
   type User {
     id: Int!
     email: String!
+    name: String
     hashedPassword: String!
     salt: String!
     resetToken: String
@@ -38,10 +39,17 @@ export const schema = gql`
     invitedBy: Int
   }
 
+  input AcceptInviteInput {
+  token: String!
+  name: String!
+  password: String!
+}
+
   type Mutation {
     createUser(input: CreateUserInput!): User! @requireAuth
     updateUser(id: Int!, input: UpdateUserInput!): User! @requireAuth
     deleteUser(id: Int!): User! @requireAuth
     inviteUser(input: InviteUserInput!): User! @requireAuth
+    acceptInvite(input: AcceptInviteInput!): User! @skipAuth
   }
 `
