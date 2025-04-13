@@ -19,6 +19,18 @@ import MainPage from './pages/MainPage/MainPage'
 const Routes = () => {
   return (
     <Router useAuth={useAuth}>
+      <Set wrap={ScaffoldLayout} title="Toppings" titleTo="toppings" buttonLabel="New Topping" buttonTo="newTopping">
+        <Route path="/toppings/new" page={ToppingNewToppingPage} name="newTopping" />
+        <Route path="/toppings/{id:Int}/edit" page={ToppingEditToppingPage} name="editTopping" />
+        <Route path="/toppings/{id:Int}" page={ToppingToppingPage} name="topping" />
+        <Route path="/toppings" page={ToppingToppingsPage} name="toppings" />
+      </Set>
+      <Set wrap={ScaffoldLayout} title="Pizzas" titleTo="pizzas" buttonLabel="New Pizza" buttonTo="newPizza">
+        <Route path="/pizzas/new" page={PizzaNewPizzaPage} name="newPizza" />
+        <Route path="/pizzas/{id:Int}/edit" page={PizzaEditPizzaPage} name="editPizza" />
+        <Route path="/pizzas/{id:Int}" page={PizzaPizzaPage} name="pizza" />
+        <Route path="/pizzas" page={PizzaPizzasPage} name="pizzas" />
+      </Set>
       <Route path="/dashboard" page={DashboardPage} name="dashboard" />
       <Route path="/" page={MainPage} name="main" />
       <Route path="/accept-invite" page={AcceptInvitePage} name="acceptInvite" />

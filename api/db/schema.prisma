@@ -23,6 +23,7 @@ model UserExample {
   name  String?
 }
 
+// User model for Admins/users
 model User {
   id          Int      @id @default(autoincrement())
   name        String?
@@ -38,5 +39,43 @@ model User {
   inviteTokenExpiresAt   DateTime?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  orders      Order[]
 }
 
+
+// Pizza model for adding an order
+model Pizza {
+  id        Int      @id @default(autoincrement())
+  name      String
+  price     Float
+  orders    Order[]
+}
+
+
+// Topping model to add on the Pizza
+model Topping {
+  id       Int              @id @default(autoincrement())
+  name     String
+  orders   OrderTopping[]
+}
+
+
+// Order model with the Pizza and corresponding Toppings
+model Order {
+  id         Int              @id @default(autoincrement())
+  user       User             @relation(fields: [userId], references: [id])
+  userId     Int
+  pizza      Pizza            @relation(fields: [pizzaId], references: [id])
+  pizzaId    Int
+  createdAt  DateTime         @default(now())
+  toppings   OrderTopping[]
+}
+
+
+model OrderTopping {
+  id         Int      @id @default(autoincrement())
+  order      Order    @relation(fields: [orderId], references: [id])
+  orderId    Int
+  topping    Topping  @relation(fields: [toppingId], references: [id])
+  toppingId  Int
+}
