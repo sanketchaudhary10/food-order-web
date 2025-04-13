@@ -14,11 +14,13 @@ import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
 import { useAuth } from './auth'
 import InviteUserPage from './pages/admin/InviteUserPage/InviteUserPage'
 import AcceptInvitePage from './pages/AcceptInvitePage/AcceptInvitePage'
+import MainPage from './pages/MainPage/MainPage'
 
 const Routes = () => {
   return (
     <Router useAuth={useAuth}>
       <Route path="/dashboard" page={DashboardPage} name="dashboard" />
+      <Route path="/" page={MainPage} name="main" />
       <Route path="/accept-invite" page={AcceptInvitePage} name="acceptInvite" />
       <Set wrap={ScaffoldLayout} title="Users" titleTo="users" buttonLabel="New User" buttonTo="newUser">
         <Route path="/users/new" page={UserNewUserPage} name="newUser" />
@@ -26,8 +28,7 @@ const Routes = () => {
         <Route path="/users/{id:Int}" page={UserUserPage} name="user" />
         <Route path="/users" page={UserUsersPage} name="users" />
         <Route path="/admin/invite" page={InviteUserPage} name="inviteUser" />
-        <Route path="/accept-invite" page={AcceptInvitePage} name="acceptInvite" />
-
+        {/* <Route path="/accept-invite" page={AcceptInvitePage} name="acceptInvite" /> */}
 
       </Set>
       <Route path="/login" page={LoginPage} name="login" />
