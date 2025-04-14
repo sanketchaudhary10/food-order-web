@@ -24,9 +24,22 @@ export const schema = gql`
     pizzaId: Int
   }
 
+  type OrderWithPDF {
+    id: Int!
+    pdfBase64: String!
+  }
+
   type Mutation {
+
     createOrder(input: CreateOrderInput!): Order! @requireAuth
     updateOrder(id: Int!, input: UpdateOrderInput!): Order! @requireAuth
     deleteOrder(id: Int!): Order! @requireAuth
+    
+    createOrderWithToppings(
+      pizzaId: Int!
+      userId: Int!
+      toppingIds: [Int!]!
+    ): OrderWithPDF! @requireAuth
+
   }
 `

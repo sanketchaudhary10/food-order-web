@@ -5,8 +5,10 @@ import type {
 } from 'types/graphql'
 
 import { db } from 'src/lib/db'
+import { requireAuth } from 'src/lib/auth'
 
 export const pizzas: QueryResolvers['pizzas'] = () => {
+  requireAuth({ roles: ['admin'] })
   return db.pizza.findMany()
 }
 
@@ -17,15 +19,15 @@ export const pizza: QueryResolvers['pizza'] = ({ id }) => {
 }
 
 export const createPizza: MutationResolvers['createPizza'] = ({ input }) => {
-  return db.pizza.create({
-    data: input,
-  })
+  requireAuth({ roles: ['admin'] })
+  return db.pizza.create({ data: input, })
 }
 
 export const updatePizza: MutationResolvers['updatePizza'] = ({
   id,
   input,
 }) => {
+  requireAuth({ roles: ['admin'] })
   return db.pizza.update({
     data: input,
     where: { id },
@@ -33,6 +35,7 @@ export const updatePizza: MutationResolvers['updatePizza'] = ({
 }
 
 export const deletePizza: MutationResolvers['deletePizza'] = ({ id }) => {
+  requireAuth({ roles: ['admin'] })
   return db.pizza.delete({
     where: { id },
   })

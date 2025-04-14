@@ -5,6 +5,9 @@ import type {
 } from 'types/graphql'
 
 import { db } from 'src/lib/db'
+import { generateOrderReceipt } from 'src/lib/pdfGenerator'
+import { user } from '../users/users'
+
 
 export const orders: QueryResolvers['orders'] = () => {
   return db.order.findMany()
@@ -37,6 +40,38 @@ export const deleteOrder: MutationResolvers['deleteOrder'] = ({ id }) => {
     where: { id },
   })
 }
+
+export const createOrderWithToppings: MutationResolvers['createOrderWithToppings'] = async ({
+  pizzaId,
+  userId,
+  toppingIds,
+}) => {
+  const order = await db.order.create({
+    data: {
+      pizza: { connect: { id: pizzaId } },
+      user: { connect: { id: userId } },
+      toppings: {
+        create: toppingIds.map((id) => ({
+          topping: { connect: { id } },
+        })),
+      },
+    },
+    include: {
+      pizza: true,
+      user: true,
+      toppings: { include: { topping: true } },
+    },
+  })
+
+  const receiptBuffer = await generateOrderReceipt(order)
+
+  
+  console.log(`PDF Receipt generated for Order #${order.id} (${receiptBuffer.length} bytes)`)
+
+  return order
+}
+
+
 
 export const Order: OrderRelationResolvers = {
   user: (_obj, { root }) => {
