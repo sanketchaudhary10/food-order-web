@@ -29,7 +29,7 @@ export const generateOrderReceipt = async (order: any): Promise<Buffer> => {
       doc.moveDown().text('Toppings:')
       order.toppings.forEach((t) => doc.text(`- ${t.topping.name}`))
     }
-
+    
     doc.end()
   })
 }

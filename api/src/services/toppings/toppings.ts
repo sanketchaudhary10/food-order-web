@@ -9,7 +9,7 @@ import { requireAuth } from 'src/lib/auth'
 
 export const toppings: QueryResolvers['toppings'] = () => {
   // requireAuth({ roles: ['admin'] })
-  requireAuth
+  requireAuth()
   return db.topping.findMany()
 }
 
