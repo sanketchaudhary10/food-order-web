@@ -26,7 +26,7 @@ export const schema = gql`
 
   type OrderWithPDF {
     id: Int!
-    pdfBase64: String!
+    pdfBase64: String
   }
 
   type Mutation {
@@ -34,7 +34,7 @@ export const schema = gql`
     createOrder(input: CreateOrderInput!): Order! @requireAuth
     updateOrder(id: Int!, input: UpdateOrderInput!): Order! @requireAuth
     deleteOrder(id: Int!): Order! @requireAuth
-    
+
     createOrderWithToppings(
       pizzaId: Int!
       userId: Int!

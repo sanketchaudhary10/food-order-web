@@ -65,10 +65,16 @@ export const createOrderWithToppings: MutationResolvers['createOrderWithToppings
 
   const receiptBuffer = await generateOrderReceipt(order)
 
+  if (!receiptBuffer) {
+    console.error('❌ PDF buffer is null or undefined!')
+  }
   
   console.log(`PDF Receipt generated for Order #${order.id} (${receiptBuffer.length} bytes)`)
 
-  return order
+  return {
+    id: order.id,
+    pdfBase64: receiptBuffer?.toString('base64') || '', // 🛡️ fallback to empty string
+  }
 }
 
 
