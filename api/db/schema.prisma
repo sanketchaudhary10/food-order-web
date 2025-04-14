@@ -40,6 +40,7 @@ model User {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   orders      Order[]
+  orderLogs   OrderLog[]
 }
 
 
@@ -79,3 +80,19 @@ model OrderTopping {
   topping    Topping  @relation(fields: [toppingId], references: [id])
   toppingId  Int
 }
+
+
+model OrderLog {
+  id               Int      @id @default(autoincrement())
+  userId           Int
+  user             User     @relation(fields: [userId], references: [id])
+  timestamp        DateTime @default(now())
+  toppingNames     String   
+
+  encryptedEmail   String   
+  encryptedName    String   
+
+  @@index([userId])
+}
+
+
